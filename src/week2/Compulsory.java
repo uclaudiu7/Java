@@ -1,6 +1,6 @@
 package week2;
 
-public class Main {
+public class Compulsory {
     public static void main(String[] args) {
         Location burla = new Location("Burla", locationType.VILLAGE);
         Location iasi = new Location("Iasi", locationType.CITY);
