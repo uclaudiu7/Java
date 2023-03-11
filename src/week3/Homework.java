@@ -1,6 +1,5 @@
 package week3;
 
-import javax.swing.*;
 import java.time.LocalDate;
 
 public class Homework {
@@ -25,6 +24,7 @@ public class Homework {
         claudiu.addRelationship(marian, "Brother");
         radu.addRelationship(claudiu, "Friend");
 
+        stefan.addRelationship(bitdefender, "Developer");
         radu.addRelationship(amazon, "Developer");
         robert.addRelationship(bitdefender, "Intern");
         claudiu.addRelationship(bitdefender, "Intern");
