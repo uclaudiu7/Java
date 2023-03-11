@@ -54,7 +54,7 @@ public class Homework {
         addRoad(roads, new Road(RoadType.COUNTRY, 40, 45, philadelphia, atl));
         addRoad(roads, new Road(RoadType.HIGHWAY, 160, 65, losAngeles, lukoil));
 
-        if(canTravel(newYorkCity, mol)){
+        if(canTravel(newYorkCity, chicago)){
             System.out.println("We have found a road for your desired locations!");
         }
         else{

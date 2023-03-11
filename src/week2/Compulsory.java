@@ -1,5 +1,4 @@
 package week2;
-
 public class Compulsory {
     public static void main(String[] args) {
         Location burla = new Location("Burla", locationType.VILLAGE, 1, 1);
