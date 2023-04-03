@@ -13,7 +13,7 @@ public class GameBoard implements java.io.Serializable{
     private Map<Integer, Point2D> dots;
     private Map<Integer, Line> backupLines;
     private Map<Integer, Line> lines;
-    private Canvas canvas;
+    private final Canvas canvas;
     private Player player1;
     private Player player2;
 
@@ -64,6 +64,8 @@ public class GameBoard implements java.io.Serializable{
     }
 
     public void resetGame(){
+        if(backupLines == null)
+            return;
         lines = new HashMap<>(backupLines);
         player1.getLines().clear();
         player2.getLines().clear();
@@ -72,6 +74,7 @@ public class GameBoard implements java.io.Serializable{
     public void removeLine(Line line) {
         lines.values().remove(line);
     }
+
 
     public Player getPlayer1() {
         return player1;
@@ -89,6 +92,46 @@ public class GameBoard implements java.io.Serializable{
         return lines;
     }
 
-}
+    public void setDots(Map<Integer, SerializablePoint> dots) {
+        this.dots = new HashMap<>();
+        for (Map.Entry<Integer, SerializablePoint> entry : dots.entrySet()) {
+            this.dots.put(entry.getKey(), new Point2D(entry.getValue().getX(), entry.getValue().getY()));
+        }
+    }
 
+    public void setLines(Map<Integer, SerializableLine> lines) {
+        this.lines = new HashMap<>();
+        for (Map.Entry<Integer, SerializableLine> entry : lines.entrySet()) {
+            this.lines.put(entry.getKey(), new Line(entry.getValue().getStart().getX(), entry.getValue().getStart().getY(), entry.getValue().getEnd().getX(), entry.getValue().getEnd().getY()));
+        }
+        backupLines = new HashMap<>(this.lines);
+    }
+
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
+
+    public Map<Integer, SerializablePoint> getSerializableDots() {
+        Map<Integer, SerializablePoint> serializableDots = new HashMap<>();
+        for (Map.Entry<Integer, Point2D> entry : dots.entrySet()) {
+            serializableDots.put(entry.getKey(), new SerializablePoint(entry.getValue().getX(), entry.getValue().getY()));
+        }
+        return serializableDots;
+    }
+
+    public Map<Integer, SerializableLine> getSerializableLines() {
+        if(backupLines == null) {
+            return new HashMap<>();
+        }
+        Map<Integer, SerializableLine> serializableLines = new HashMap<>();
+        for (Map.Entry<Integer, Line> entry : backupLines.entrySet()) {
+            serializableLines.put(entry.getKey(), new SerializableLine(new SerializablePoint(entry.getValue().getStartX(), entry.getValue().getStartY()), new SerializablePoint(entry.getValue().getEndX(), entry.getValue().getEndY())));
+        }
+        return serializableLines;
+    }
+
+}
 

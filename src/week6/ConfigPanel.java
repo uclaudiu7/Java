@@ -2,39 +2,30 @@ package com.example.week6;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class ConfigPanel extends StackPane {
-    private Label dotsLabel;
-    private Label linesLabel;
-    private Label player1Label;
-    private Label player2Label;
-    private TextField player1TextField;
-    private TextField player2TextField;
-    private Spinner<Integer> dotsSpinner;
-    private ChoiceBox<Double> linesChoiceBox;
-    private Button newGameButton;
-    private HBox hbox;
-    private CanvasPanel canvasPanel;
+    private final TextField player1TextField;
+    private final TextField player2TextField;
+    private final Spinner<Integer> dotsSpinner;
+    private final ChoiceBox<Double> linesChoiceBox;
 
     public ConfigPanel(CanvasPanel canvasPanel, GameBoard gameBoard) {
-        this.canvasPanel = canvasPanel;
 
-        player1Label = new Label("Player 1:");
-        player2Label = new Label("Player 2:");
+        Label player1Label = new Label("Player 1:");
+        player1Label.setTextFill(Color.BLUE);
+        Label player2Label = new Label("Player 2:");
+        player2Label.setTextFill(Color.RED);
         player1TextField = new TextField();
         player2TextField = new TextField();
-        dotsLabel = new Label("Number of dots:");
-        linesLabel = new Label("Line probability:");
+        Label dotsLabel = new Label("Number of dots:");
+        Label linesLabel = new Label("Line probability:");
         dotsSpinner = new Spinner<>(5, 30, 5);
         linesChoiceBox = new ChoiceBox<>();
-        newGameButton = new Button("Create New Game!");
-        hbox = new HBox();
+        Button newGameButton = new Button("Create New Game!");
+        HBox hbox = new HBox();
 
         player1TextField.setMaxWidth(100);
         player2TextField.setMaxWidth(100);
@@ -71,4 +62,12 @@ public class ConfigPanel extends StackPane {
             canvasPanel.startListening();
         });
     }
+
+    public void setPlayer1TextField(String text) {
+        player1TextField.setText(text);
+    }
+    public void setPlayer2TextField(String text) {
+        player2TextField.setText(text);
+    }
+
 }

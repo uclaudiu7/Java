@@ -19,13 +19,8 @@ import java.io.IOException;
 
 
 public class ControlPanel extends HBox {
-    private CanvasPanel canvasPanel;
-    private GameBoard gameBoard;
-    private Button loadButton;
-    private Button saveButton;
-    private Button exportButton;
-    private Button resetButton;
-    private Button exitButton;
+    private final CanvasPanel canvasPanel;
+    private final GameBoard gameBoard;
 
     public ControlPanel(CanvasPanel canvasPanel, GameBoard gameBoard, Game game) {
         this.canvasPanel = canvasPanel;
@@ -35,11 +30,11 @@ public class ControlPanel extends HBox {
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.web("#f0ecec"), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        loadButton = new Button("Load");
-        saveButton = new Button("Save");
-        exportButton = new Button("Export");
-        resetButton = new Button("Reset");
-        exitButton = new Button("Exit");
+        Button loadButton = new Button("Load");
+        Button saveButton = new Button("Save");
+        Button exportButton = new Button("Export");
+        Button resetButton = new Button("Reset");
+        Button exitButton = new Button("Exit");
 
         loadButton.setOnAction(event -> handleLoadButton(game));
         saveButton.setOnAction(event -> handleSaveButton(game));
@@ -84,6 +79,9 @@ public class ControlPanel extends HBox {
     private void handelResetButton(ActionEvent event) {
         gameBoard.resetGame();
         canvasPanel.render();
+        canvasPanel.setPlayerToMove(1);
+        if(gameBoard.getPlayer1() == null)
+            return;
         canvasPanel.setTurnText("Player to chose: " + gameBoard.getPlayer1().getName());
         canvasPanel.startListening();
     }

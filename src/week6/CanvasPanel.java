@@ -15,16 +15,15 @@ import javafx.scene.text.Text;
 import java.util.Map;
 
 public class CanvasPanel extends BorderPane {
-
     private final Canvas canvas;
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
     private Map<Integer, Point2D> dots;
     private Map<Integer, Line> lines;
     private GameBoard gameBoard;
-    private Text turnText;
+    private final Text turnText;
     private int playerToMove = 1;
 
-    private EventHandler<MouseEvent> clickHandler = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> clickHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent event) {
             Point2D point = new Point2D(event.getX(), event.getY());
@@ -51,7 +50,7 @@ public class CanvasPanel extends BorderPane {
                 gc.strokeLine(closestLine.getStartX(), closestLine.getStartY(), closestLine.getEndX(), closestLine.getEndY());
             }
         }
-    };;
+    };
 
     public CanvasPanel(Canvas canvas, GameBoard gameBoard) {
         this.canvas = canvas;
@@ -107,6 +106,33 @@ public class CanvasPanel extends BorderPane {
         return Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
     }
 
+    public void load(GameBoard gameBoard, Player player1, Player player2) {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.setLineWidth(2);
+        this.gameBoard = gameBoard;
+        dots = gameBoard.getDots();
+        lines = gameBoard.getLines();
+        for (int i = 0; i < dots.size(); i++) {
+            Point2D dot = dots.get(i);
+            gc.setFill(Color.BLACK);
+            gc.fillOval(dot.getX() - 5, dot.getY() - 5, 10, 10);
+        }
+        for (Line line : lines.values()) {
+            gc.setStroke(Color.BLACK);
+            gc.strokeLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+        }
+        for (int i= 0; i < player1.getLines().size(); i++) {
+            Line line = player1.getLines().get(i);
+            gc.setStroke(player1.getColor());
+            gc.strokeLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+        }
+        for (int i= 0; i < player2.getLines().size(); i++) {
+            Line line = player2.getLines().get(i);
+            gc.setStroke(player2.getColor());
+            gc.strokeLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
+        }
+    }
+
     public void setTurnText(String text) {
         turnText.setText(text);
     }
@@ -131,6 +157,22 @@ public class CanvasPanel extends BorderPane {
 
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public void setGameBoard(GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
+    }
+
+    public void setPlayerToMove(int playerToMove) {
+        this.playerToMove = playerToMove;
+        if(playerToMove == 1)
+            turnText.setText("Player to chose: " + gameBoard.getPlayer1().getName());
+        else
+            turnText.setText("Player to chose: " + gameBoard.getPlayer2().getName());
+    }
+
+    public int getPlayerToMove() {
+        return playerToMove;
     }
 
 }
