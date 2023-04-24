@@ -3,8 +3,9 @@ package org.example;
 public class Robot implements Runnable {
     int x;
     int y;
-    private String name;
-    private Map map;
+    private final String name;
+    private final Map map;
+    private boolean finished;
     private boolean running;
     private boolean paused;
     private int numTokens;
@@ -14,18 +15,29 @@ public class Robot implements Runnable {
         this.map = map;
         x = (int) (Math.random() * map.getSize());
         y = (int) (Math.random() * map.getSize());
+        while(map.isVisited(x, y)){
+            x = (int) (Math.random() * map.getSize());
+            y = (int) (Math.random() * map.getSize());
+        }
         running = true;
-        paused = false;
+        paused = true;
+        finished = false;
     }
 
     @Override
     public void run() {
-        while(!Thread.interrupted() && running){
+        while(running){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if(!paused){
                 explore(x, y);
             }
-            if(map.isFinished()){
-                System.out.println(name + " has finished exploring the map and extracted " + numTokens + " tokens.");
+            if(finished){
+                System.out.println(name + ":  I finished exploring the map and placed " + numTokens + " tokens.");
+                map.finishedRobot();
                 running = false;
             }
         }
@@ -33,11 +45,13 @@ public class Robot implements Runnable {
 
     public synchronized void start(){
         paused = false;
+        running = true;
+        System.out.println(name + " has been started.");
         notify();
     }
 
     public synchronized void pause(long time) throws InterruptedException{
-        System.out.println(name + " is pausing....");
+        System.out.println(name + " has been paused.");
         paused = true;
         if(time == 0){
             wait(200);
@@ -49,11 +63,12 @@ public class Robot implements Runnable {
 
     private void explore(int x, int y) {
         if(!paused){
+            finished = true;
             if (map.visit(x, y)) {
-                System.out.println(name + " visited cell [" + x + ", " + y + "] and extracted tokens: " + map.extractTokens());
+                System.out.println(name + " -> [" + x + ", " + y + "] and extracted tokens: " + map.extractTokens());
                 increaseTokens(map.getSize());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -70,14 +85,6 @@ public class Robot implements Runnable {
                     explore(x, y - 1);
                 }
             }
-        }
-        else{
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(name + " is paused");
         }
     }
 

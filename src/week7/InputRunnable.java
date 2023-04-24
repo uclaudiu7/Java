@@ -15,7 +15,6 @@ class InputRunnable implements Runnable {
     public void run() {
         while(true){
             String command = scanner.nextLine();
-            System.out.println("------Command: " + command);
             if(command.equals("start all")){
                 for(Robot robot : robots){
                     robot.start();
@@ -25,7 +24,6 @@ class InputRunnable implements Runnable {
                 int robotIndex = Integer.parseInt(command.split(" ")[1]);
                 robots.get(robotIndex-1).start();
             } else if (command.equals("pause all")) {
-                System.out.println("---should pause all");
                 for(Robot robot : robots){
                     try {
                         robot.pause(0);
@@ -38,9 +36,9 @@ class InputRunnable implements Runnable {
                 String[] words = command.split("\\s+");
                 if(words.length == 2){
                     if(command.split(" ")[1].equals("all")){
-                        for(int i = 0; i < robots.size(); i++){
+                        for (Robot robot : robots) {
                             try {
-                                robots.get(i).pause(0);
+                                robot.pause(0);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
