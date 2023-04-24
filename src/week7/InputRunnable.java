@@ -17,20 +17,18 @@ class InputRunnable implements Runnable {
             String command = scanner.nextLine();
             if(command.equals("start all")){
                 for(Robot robot : robots){
-                    robot.start();
-                    System.out.println(robot.getName() + " started");
+                    if(robot.isPaused()){
+                        robot.start();
+                    }
                 }
             } else if(command.startsWith("start")){
                 int robotIndex = Integer.parseInt(command.split(" ")[1]);
-                robots.get(robotIndex-1).start();
-            } else if (command.equals("pause all")) {
-                for(Robot robot : robots){
-                    try {
-                        robot.pause(0);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println("---paused all");
+                if(robotIndex > robots.size()){
+                    System.out.println("Invalid robot index.");
+                    continue;
+                }
+                if(robots.get(robotIndex-1).isPaused()){
+                    robots.get(robotIndex-1).start();
                 }
             } else if(command.startsWith("pause ")){
                 String[] words = command.split("\\s+");
@@ -38,15 +36,23 @@ class InputRunnable implements Runnable {
                     if(command.split(" ")[1].equals("all")){
                         for (Robot robot : robots) {
                             try {
-                                robot.pause(0);
+                                if(!robot.isPaused()){
+                                    robot.pause(0);
+                                }
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                     } else{
                         int robotIndex = Integer.parseInt(command.split(" ")[1]);
+                        if(robotIndex > robots.size()){
+                            System.out.println("Invalid robot index.");
+                            continue;
+                        }
                         try {
-                            robots.get(robotIndex-1).pause(0);
+                            if(!robots.get(robotIndex-1).isPaused()){
+                                robots.get(robotIndex-1).pause(0);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -56,16 +62,24 @@ class InputRunnable implements Runnable {
                         int time = Integer.parseInt(command.split(" ")[2]);
                         for(Robot robot : robots){
                             try {
-                                robot.pause(time);
+                                if(!robot.isPaused()){
+                                    robot.pause(time);
+                                }
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                     } else{
                         int robotIndex = Integer.parseInt(command.split(" ")[1]);
+                        if(robotIndex > robots.size()){
+                            System.out.println("Invalid robot index.");
+                            continue;
+                        }
                         int time = Integer.parseInt(command.split(" ")[2]);
                         try {
-                            robots.get(robotIndex-1).pause(time);
+                            if(!robots.get(robotIndex-1).isPaused()){
+                                robots.get(robotIndex-1).pause(time);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

@@ -6,10 +6,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int size = 4;
+        int size = 8;
         int numRobots = 4;
         Map map = new Map(size, numRobots);
-        Timekeeper timekeeper = new Timekeeper(50, map);
+        Timekeeper timekeeper = new Timekeeper(100, map);
         timekeeper.start();
 
         List<Robot> robots = new ArrayList<>();

@@ -21,6 +21,12 @@ public class Timekeeper extends Thread{
                 System.exit(0);
             } else if(map.isFinished()){
                 System.out.println("Timekeeper:  Map has been fully explored in " + elapsedTime + " miliseconds.");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                map.printMap();
                 System.exit(0);
             }
         }
